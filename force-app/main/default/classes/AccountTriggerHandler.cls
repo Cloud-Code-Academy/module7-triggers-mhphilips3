@@ -17,6 +17,9 @@ public with sharing class AccountTriggerHandler {
                 acct.BillingState = acct.ShippingState;
                 acct.BillingPostalCode = acct.ShippingPostalCode;
                 acct.BillingCountry = acct.ShippingCountry;
+            }
+            if (acct.Phone !=null && acct.Website != null && acct.Fax != null){
+                acct.Rating = 'Hot';
             }           
         }
     }
