@@ -7,3 +7,4 @@ trigger OpportunityTrigger on Opportunity (before update, before delete) {
         OpportunityTriggerHandler.beforeDeleteOpportunityTrigger(Trigger.old);
     }
 }
+
