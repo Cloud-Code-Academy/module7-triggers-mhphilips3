@@ -7,6 +7,32 @@ public with sharing class OpportunityTriggerHandler {
             }
         }
     }
+
+    public static void afterUpdateOpportunityTrigger(List<Opportunity> oppList) {
+        //Question 7
+        Set<Id> acctIdSet = new Set<Id>();  //develop unique set of related Account Ids
+        for(Opportunity opp : oppList){
+            acctIdSet.add(opp.AccountId);
+        }
+        Map<Id, Id> accIdToContIdMap = new Map<Id,Id>();  // Map of opps AccountIds to Primary_Contact__c Ids
+        List<Contact> contList = new List<Contact>([SELECT Id, Name, AccountId, Title 
+                                                    FROM Contact 
+                                                    WHERE AccountId 
+                                                    IN :acctIdSet 
+                                                    AND Title = 'CEO' 
+                                                    LIMIT 1]);
+        for (Contact cont : contList){  //contList limited to CEOs from related Accounts
+            accIdToContIdMap.put(cont.AccountId, cont.Id); 
+        }
+        
+        for (Opportunity opp : oppList){    // changes primary contact for only those opps with an account that has a contact with CEO title
+            If (opp.AccountId != null && accIdToContIdMap.containsKey(opp.AccountId)){
+                opp.Primary_Contact__c = accIdToContIdMap.get(opp.AccountId);    
+            }
+        }
+    }
+
+
     //Question 6
     public static void beforeDeleteOpportunityTrigger(List<Opportunity> oppList) {
         Set<Id> acctIdSet = new Set<Id>();
@@ -23,4 +49,5 @@ public with sharing class OpportunityTriggerHandler {
             }
         }
     }
+    
 }
