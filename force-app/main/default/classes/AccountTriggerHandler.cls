@@ -33,6 +33,6 @@ public with sharing class AccountTriggerHandler {
                 AccountId = acct.Id);
             contactList.add(cont);
         }
-    insert contactList;
+        insert contactList;
     }
 }
